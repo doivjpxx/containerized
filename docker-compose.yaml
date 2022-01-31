@@ -35,3 +35,19 @@ services:
         condition: service_healthy
     links:
       - users-db
+
+  web-service:
+    container_name: web-service
+    build: ./services/web
+    volumes:
+      - './services/web:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '3007:3006'
+    environment:
+      - NODE_ENV=${NODE_ENV}
+    depends_on:
+      users-service:
+        condition: service_started
+    links:
+      - users-service
